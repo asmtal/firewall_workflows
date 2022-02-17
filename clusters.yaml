@@ -1,0 +1,3 @@
+clusters:
+  test_cluster:
+    workspace: firewall
