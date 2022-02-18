@@ -63,8 +63,6 @@ jobs:
           pre-commit run --all-files -c ./tmp/.pre-commit-config.yaml
         continue-on-error: true
 
-      - name: Debug
-
       - uses: actions/github-script@0.9.0
         #if: steps.pre-commit.outcome == 'failure'
         env:
