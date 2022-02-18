@@ -8,6 +8,6 @@ repos:
       - id: terraform_tflint
 
   - repo: https://github.com/bridgecrewio/checkov.git
-    rev: v2.0.872 # change to tag or sha
+    rev: 2.0.872 # change to tag or sha
     hooks:
       - id: checkov
