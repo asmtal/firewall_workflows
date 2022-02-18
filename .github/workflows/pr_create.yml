@@ -11,9 +11,7 @@ on:
       PERSONAL_ACCESS_TOKEN:
         required: true
       TFC_API_TOKEN:
-        required: false
-      WORKSPACE:
-        required: false
+        required: true
 
 jobs:
   pre-commit:
@@ -111,7 +109,7 @@ jobs:
         id: workspace
         run: |
           terraform workspace list
-          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WORKSPACE}_test\"\n    }\n  }\n}\n" > workspace.tf
+          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"firewall_test\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
 
       # - name: Terraform Format
