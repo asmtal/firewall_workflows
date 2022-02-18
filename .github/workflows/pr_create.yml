@@ -117,9 +117,6 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
-        with:
-          # terraform_version: 0.13.0:
-          cli_config_credentials_token: ${{ secrets.TFC_API_TOKEN }}
 
       # - name: Terraform Validate
       #   id: validate
