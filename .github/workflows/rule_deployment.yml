@@ -36,21 +36,22 @@ jobs:
       - name: Terraform Set workspace
         id: workspace
         run: |
+          WKSP=$(cat deployment.yml | yq .workspace)
           terraform workspace list
-          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WORKSPACE}_test\"\n    }\n  }\n}\n" > workspace.tf
+          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WKSP}\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
 
-      - name: Terraform Format
-        id: fmt
-        run: terraform fmt -check
+      # - name: Terraform Format
+      #   id: fmt
+      #   run: terraform fmt -check
 
       - name: Terraform Init
         id: init
         run: terraform init
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+      # - name: Terraform Validate
+      #   id: validate
+      #   run: terraform validate -no-color
 
       # - name: Terraform Plan
       #   id: plan
@@ -85,16 +86,21 @@ jobs:
       #   if: steps.plan.outcome == 'failure'
       #   run: exit 1
 
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply -auto-approve
-        continue-on-error: true
-
       # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
+      #   id: apply
       #   run: terraform apply -auto-approve
+      #   continue-on-error: true
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
 
       - name: Terraform Apply Status
         if: steps.apply.outcome == 'failure'
         run: |
           echo "Terraform apply failed - see 'apply' step above for more details"
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v2
