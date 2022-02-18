@@ -102,12 +102,10 @@ jobs:
 
       - name: Terraform Set workspace
         id: workspace
-        env:
-          DEPLOYMENT_FILE: "deployment.yml"
         run: |
-          WORKSPACE=$(cat ${DEPLOYMENT_FILE} | yq .workspace)
+          WKSP=$(cat deployment.yml | yq .workspace)
           terraform workspace list
-          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${{WORKSPACE}}_test\"\n    }\n  }\n}\n" > workspace.tf
+          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WKSP}\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
 
       # - name: Terraform Format
