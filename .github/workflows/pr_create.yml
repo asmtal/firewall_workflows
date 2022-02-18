@@ -10,8 +10,8 @@ on:
         required: true
 
 jobs:
-  pre-commit:
-    name: pre-commit
+  code_review:
+    name: code_review
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -63,25 +63,25 @@ jobs:
           pre-commit run --all-files -c ./tmp/.pre-commit-config.yaml
         continue-on-error: true
 
-      # - uses: actions/github-script@0.9.0
-      #   #if: steps.pre-commit.outcome == 'failure'
-      #   env:
-      #     PRECOMMIT: ${{ steps.pre-commit.outputs.pre-commit }}
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     script: |
-      #       const output = `#### Pre-Commit Checks 🖌\`${{ steps.pre-commit.outcome }}\`
-      #       <details><summary>Pre-Commit Results</summary>
+      - uses: actions/github-script@0.9.0
+        #if: steps.pre-commit.outcome == 'failure'
+        env:
+          PREC: ${{ steps.pre-commit.outputs.pre-commit }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Pre-Commit Checks 🖌\`${{ steps.pre-commit.outcome }}\`
+            <details><summary>Pre-Commit Results</summary>
 
-      #       ${env.pre-commit}
+            ${env.PREC}
 
-      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-      #       github.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: output
-      #       })
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Pre-Commit Status
         if: steps.pre-commit.outcome == 'failure'
