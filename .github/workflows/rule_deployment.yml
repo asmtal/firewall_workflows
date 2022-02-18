@@ -5,6 +5,8 @@ on:
     secrets:
       PERSONAL_ACCESS_TOKEN:
         required: true
+      TFC_API_TOKEN:
+        required: true
 
 jobs:
   rules_deploy:
