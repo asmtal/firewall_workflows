@@ -59,14 +59,13 @@ jobs:
 
       - name: Run pre-commit
         id: pre-commit
-        run: |
-          pre-commit run --all-files -c ./tmp/.pre-commit-config.yaml
+        run: pre-commit run --all-files -c ./tmp/.pre-commit-config.yaml
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
         #if: steps.pre-commit.outcome == 'failure'
         env:
-          COMMIT: "${{ steps.pre-commit.outputs }}"
+          COMMIT: "${{ steps.pre-commit.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
