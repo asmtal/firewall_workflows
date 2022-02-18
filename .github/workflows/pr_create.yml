@@ -20,8 +20,8 @@ jobs:
 
       - uses: actions/checkout@v2
         with:
-          repository: "twallac10/firewall_workflows"
-          path: ./tmp
+          repository: twallac10/firewall_workflows
+          path: tmp
           token: $ {{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - uses: actions/setup-python@v2
