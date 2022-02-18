@@ -66,7 +66,7 @@ jobs:
       - uses: actions/github-script@0.9.0
         #if: steps.pre-commit.outcome == 'failure'
         env:
-          COMMIT: "${{ steps.pre-commit }}"
+          COMMIT: "${{ steps.pre-commit.outputs }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
