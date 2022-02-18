@@ -10,6 +10,10 @@ on:
     secrets:
       PERSONAL_ACCESS_TOKEN:
         required: true
+      TFC_API_TOKEN:
+        required: false
+      WORKSPACE:
+        required: false
 
 jobs:
   pre-commit:
