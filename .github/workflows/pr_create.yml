@@ -80,8 +80,6 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     needs: pre-commit
-    env:
-      WORKSPACE: ${{ fromJSON(cat ./deployment.json) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -92,6 +90,7 @@ jobs:
         run: |
           git config --global user.email "terence.wallace@gmail.com"
           git config --global user.name "Github Test"
+
       - run: |
           echo "Job started"
 
@@ -103,9 +102,12 @@ jobs:
 
       - name: Terraform Set workspace
         id: workspace
+        env:
+          DEPLOYMENT_FILE: "deployment.yml"
         run: |
+          WORKSPACE=$(cat ${DEPLOYMENT_FILE} | yq .workspace)
           terraform workspace list
-          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${{env.WORKSPACE}}_test\"\n    }\n  }\n}\n" > workspace.tf
+          echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${{WORKSPACE}}_test\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
 
       # - name: Terraform Format
