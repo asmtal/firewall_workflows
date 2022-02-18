@@ -99,8 +99,3 @@ jobs:
         if: steps.apply.outcome == 'failure'
         run: |
           echo "Terraform apply failed - see 'apply' step above for more details"
-
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: hmarr/debug-action@v2
