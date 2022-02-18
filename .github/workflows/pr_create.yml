@@ -22,7 +22,7 @@ jobs:
         with:
           repository: "twallac10/firewall_workflows"
           path: ./tmp
-          token: $ {{ secrets.PAT }}
+          # token: $ {{ secrets.PAT }}
 
       - uses: actions/setup-python@v2
 
