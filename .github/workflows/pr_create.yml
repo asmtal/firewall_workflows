@@ -66,15 +66,17 @@ jobs:
       - uses: actions/github-script@0.9.0
         #if: steps.pre-commit.outcome == 'failure'
         env:
-          PREC: ${{ steps.pre-commit.outputs.pre-commit }}
+          COMMIT: "${{ steps.pre-commit.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Pre-Commit Checks 🖌\`${{ steps.pre-commit.outcome }}\`
             <details><summary>Pre-Commit Results</summary>
-
-            ${env.PREC}
-
+            \n
+            \`\`\`\n\n
+            ${process.env.COMMIT}
+            \`\`\`
+            </details>
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
             github.issues.createComment({
               issue_number: context.issue.number,
