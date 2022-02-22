@@ -26,28 +26,33 @@ jobs:
 
       - uses: actions/setup-python@v2
 
-      # - name: Set PY variable to for pre-commit cache
-      #   run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+      - name: Set PY variable to for pre-commit cache
+        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
 
-      # - uses: actions/cache@v2
-      #   with:
-      #     path: ~/.cache/pre-commit
-      #     key: pre-commit-${{ env.PY }}-${{ hashFiles('.pre-commit-config.yaml') }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ env.PY }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - name: Install terraform-docs
+      # - name: Install terraform-docs
+      #   working-directory: /tmp
+      #   run: |
+      #     curl -Lo ./terraform-docs.tar.gz "$(curl -s https://api.github.com/repos/terraform-docs/terraform-docs/releases/latest | grep -o -E "https://.+?-linux-amd64.tar.gz")" \
+      #       && tar -xzf terraform-docs.tar.gz \
+      #       && chmod +x terraform-docs \
+      #       && sudo mv terraform-docs /usr/bin/
+
+      # - name: Install TFLint
+      #   working-directory: /tmp
+      #   run: |
+      #     curl -Lo tflint.zip "$(curl -s https://api.github.com/repos/terraform-linters/tflint/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" \
+      #       && unzip tflint.zip \
+      #       && sudo mv tflint /usr/bin/
+
+      - name: Install tflint
         working-directory: /tmp
         run: |
-          curl -Lo ./terraform-docs.tar.gz "$(curl -s https://api.github.com/repos/terraform-docs/terraform-docs/releases/latest | grep -o -E "https://.+?-linux-amd64.tar.gz")" \
-            && tar -xzf terraform-docs.tar.gz \
-            && chmod +x terraform-docs \
-            && sudo mv terraform-docs /usr/bin/
-
-      - name: Install TFLint
-        working-directory: /tmp
-        run: |
-          curl -Lo tflint.zip "$(curl -s https://api.github.com/repos/terraform-linters/tflint/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" \
-            && unzip tflint.zip \
-            && sudo mv tflint /usr/bin/
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
       - name: Install Checkov
         run: |
