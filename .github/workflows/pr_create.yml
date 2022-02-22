@@ -22,32 +22,8 @@ jobs:
         with:
           repository: twallac10/firewall_workflows
           path: tmp
-          # token: $ {{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - uses: actions/setup-python@v2
-
-      - name: Set PY variable to for pre-commit cache
-        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-${{ env.PY }}-${{ hashFiles('.pre-commit-config.yaml') }}
-
-      # - name: Install terraform-docs
-      #   working-directory: /tmp
-      #   run: |
-      #     curl -Lo ./terraform-docs.tar.gz "$(curl -s https://api.github.com/repos/terraform-docs/terraform-docs/releases/latest | grep -o -E "https://.+?-linux-amd64.tar.gz")" \
-      #       && tar -xzf terraform-docs.tar.gz \
-      #       && chmod +x terraform-docs \
-      #       && sudo mv terraform-docs /usr/bin/
-
-      # - name: Install TFLint
-      #   working-directory: /tmp
-      #   run: |
-      #     curl -Lo tflint.zip "$(curl -s https://api.github.com/repos/terraform-linters/tflint/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" \
-      #       && unzip tflint.zip \
-      #       && sudo mv tflint /usr/bin/
 
       - name: Install tflint
         working-directory: /tmp
@@ -66,11 +42,6 @@ jobs:
         id: pre-commit
         run: pre-commit run --all-files -c ./tmp/.pre-commit-config.yaml
         continue-on-error: true
-
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: echo "$STEPS_CONTEXT"
 
       - uses: actions/github-script@0.9.0
         #if: steps.pre-commit.outcome == 'failure'
@@ -178,31 +149,3 @@ jobs:
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
-
-  context-debug:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJSON(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJSON(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
