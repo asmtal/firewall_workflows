@@ -97,10 +97,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format \`${{ steps.fmt.outcome}}\`
-            #### Terraform Validate \`${{ steps.validate.outcome }}\`
+            const output = `#### Terraform Format 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Validate 🤖\`${{ steps.validate.outcome }}\`
             #### Bridgecrew Checkov \`${{ steps.checkov.outcome }}`\
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
             <details><summary>Show Plan</summary>
             \n
             \`\`\`\n\n
@@ -108,6 +109,7 @@ jobs:
             \`\`\`
             </details>
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
