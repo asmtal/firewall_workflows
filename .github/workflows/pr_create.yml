@@ -129,5 +129,5 @@ jobs:
             })
 
       - name: Code Review Status
-        if: steps.plan.outcome == 'failure' || steps.fmt.outcome == 'failure'
+        if: steps.plan.outcome == 'failure' || steps.fmt.outcome == 'failure' || steps.tflint.outcome == 'failure' || steps.checkov.outcome == 'failure'
         run: exit 1
