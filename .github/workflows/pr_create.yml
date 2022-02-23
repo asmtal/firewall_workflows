@@ -98,10 +98,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `Terraform Format 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Validate 🤖\`${{ steps.validate.outcome }}\`
-            #### Bridgecrew Checkov \`${{ steps.checkov.outcome }}`\
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
 
             <details><summary>Show Plan</summary>
 
