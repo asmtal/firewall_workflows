@@ -23,6 +23,11 @@ jobs:
           repository: twallac10/firewall_workflows
           path: tmp
 
+      - name: Show folders
+        run: |
+          echo $PWD
+          ls -l
+
       - name: Checkout TF Code
         uses: actions/checkout@v2
         with:
