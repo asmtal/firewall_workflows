@@ -17,11 +17,11 @@ jobs:
       - run: |
           echo "Checkout Repo's"
 
-      - name: Checkout Workflow Files
-        uses: actions/checkout@v2
-        with:
-          repository: twallac10/firewall_workflows
-          path: tmp
+      # - name: Checkout Workflow Files
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: twallac10/firewall_workflows
+      #     path: tmp
 
       - name: Checkout TF Code
         uses: actions/checkout@v2
