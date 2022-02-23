@@ -17,6 +17,11 @@ jobs:
       - name: Checkout Repo's
         run: echo "Checkout Repo's"
 
+      - name: Checkout TF Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Checkout Workflow Files
         uses: actions/checkout@v2
         with:
@@ -28,20 +33,17 @@ jobs:
           echo $PWD
           ls -l
 
-      - name: Checkout TF Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
       - name: Git config
         run: |
           git config --global user.email "terence.wallace@gmail.com"
           git config --global user.name "Github Test"
 
-      - run: |
+      - name: Install Tools
+        run: |
           echo "Install Tools"
 
-      - uses: actions/setup-python@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
 
       - name: Show folders
         run: |
