@@ -14,10 +14,8 @@ jobs:
     name: "PR Code Review"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout TF Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - run: |
+          echo "Checkout Repo's"
 
       - name: Checkout Workflow Files
         uses: actions/checkout@v2
@@ -25,13 +23,18 @@ jobs:
           repository: twallac10/firewall_workflows
           path: tmp
 
+      - name: Checkout TF Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Git config
         run: |
           git config --global user.email "terence.wallace@gmail.com"
           git config --global user.name "Github Test"
 
       - run: |
-          echo "Job started"
+          echo "Install Tools"
 
       - uses: actions/setup-python@v2
 
@@ -57,6 +60,9 @@ jobs:
           terraform workspace list
           echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WKSP}\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
+
+      - run: |
+          echo "Start Validation"
 
       - name: Terraform Format
         id: fmt
