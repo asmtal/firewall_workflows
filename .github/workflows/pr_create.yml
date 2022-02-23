@@ -11,10 +11,11 @@ on:
 
 jobs:
   code_review:
-    name: code_review
+    name: "PR Code Review"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
@@ -22,6 +23,14 @@ jobs:
         with:
           repository: twallac10/firewall_workflows
           path: tmp
+
+      - name: Git config
+        run: |
+          git config --global user.email "terence.wallace@gmail.com"
+          git config --global user.name "Github Test"
+
+      - run: |
+          echo "Job started"
 
       - uses: actions/setup-python@v2
 
@@ -33,62 +42,6 @@ jobs:
       - name: Install Checkov
         run: |
           python -m pip install checkov
-
-      - name: Install pre-commit
-        run: |
-          python -m pip install --upgrade pre-commit
-
-      - name: Run pre-commit
-        id: pre-commit
-        run: pre-commit run --all-files -c ./tmp/.pre-commit-config.yaml
-        continue-on-error: true
-
-      - uses: actions/github-script@0.9.0
-        #if: steps.pre-commit.outcome == 'failure'
-        env:
-          COMMIT: "${{ steps.pre-commit.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Pre-Commit Checks 🖌\`${{ steps.pre-commit.outcome }}\`
-            <details><summary>Pre-Commit Results</summary>
-            \n
-            \`\`\`\n\n
-            ${process.env.COMMIT}
-            \`\`\`
-            </details>
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
-      - name: Pre-Commit Status
-        if: steps.pre-commit.outcome == 'failure'
-        run: exit 1
-
-      - name: Checkov
-        run: checkov -d ./
-
-  terraform_plan:
-    name: "Terraform"
-    runs-on: ubuntu-latest
-    needs: code_review
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Git config
-        run: |
-          git config --global user.email "terence.wallace@gmail.com"
-          git config --global user.name "Github Test"
-
-      - run: |
-          echo "Job started"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -104,28 +57,26 @@ jobs:
           echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WKSP}\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
 
-      # - name: Terraform Format
-      #   id: fmt
-      #   run: terraform fmt -check
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
 
       - name: Terraform Init
         id: init
         run: terraform init
 
-      # - name: Terraform Validate
-      #   id: validate
-      #   run: terraform validate -no-color
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Checkov
+        run: checkov -d ./
 
       - name: Terraform Plan
         id: plan
         #if: github.event_name == 'pull_request'
         run: terraform plan -no-color
         continue-on-error: true
-
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: echo "$STEPS_CONTEXT"
 
       - uses: actions/github-script@0.9.0
         #if: github.event_name == 'pull_request'
@@ -134,7 +85,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            const output = `Terraform Format \`${{ steps.fmt.outcome}}\`
+            ####Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validate \`${{ steps.validate.outcome }}\`
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
             <details><summary>Show Plan</summary>
             \n
