@@ -83,7 +83,10 @@ jobs:
       - name: TFLint
         if: steps.validate.outcome == 'success'
         id: tflint
-        run: tflint -c .\\tflint.hcl
+        run: |
+          echo $PWD
+          ls -la
+          tflint -c .\\tflint.hcl
         continue-on-error: true
 
       - name: Checkov
