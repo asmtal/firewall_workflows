@@ -82,12 +82,6 @@ jobs:
         run: terraform validate -no-color
         continue-on-error: true
 
-      - name: Show folders
-        run: |
-          echo $PWD
-          ls -l
-          ls .\\tmp
-
       - name: TFLint
         if: steps.validate.outcome == 'success'
         id: tflint
