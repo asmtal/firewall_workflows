@@ -92,7 +92,7 @@ jobs:
       - name: Checkov
         id: checkov
         if: steps.validate.outcome == 'success'
-        run: checkov -d ./
+        run: checkov --soft-fail -d ./
 
       - name: Terraform Plan
         id: plan
