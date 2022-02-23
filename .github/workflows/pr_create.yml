@@ -83,7 +83,7 @@ jobs:
       - name: TFLint
         if: steps.validate.outcome == 'success'
         id: tflint
-        run: tflint -c .\tmp\tflint.hcl
+        run: tflint -c .\tmp\\tflint.hcl
         continue-on-error: true
 
       - name: Checkov
