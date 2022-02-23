@@ -28,11 +28,6 @@ jobs:
           repository: twallac10/firewall_workflows
           path: tmp
 
-      - name: Show folders
-        run: |
-          echo $PWD
-          ls -l
-
       - name: Git config
         run: |
           git config --global user.email "terence.wallace@gmail.com"
@@ -44,11 +39,6 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v2
-
-      - name: Show folders
-        run: |
-          echo $PWD
-          ls -l
 
       - name: Install tflint
         working-directory: tmp
@@ -92,15 +82,17 @@ jobs:
         run: terraform validate -no-color
         continue-on-error: true
 
+      - name: Show folders
+        run: |
+          echo $PWD
+          ls -l
+          ls .\\tmp
+
       - name: TFLint
         if: steps.validate.outcome == 'success'
         id: tflint
         run: |
-          echo $PWD
-          ls -la \\
-          echo $PWD
-          ls -la \\tmp
-          tflint -c \\tmp\\tflint.hcl
+          tflint -c .\\tmp\\tflint.hcl
         continue-on-error: true
 
       - name: Checkov
