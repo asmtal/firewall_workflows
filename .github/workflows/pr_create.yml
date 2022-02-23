@@ -14,8 +14,8 @@ jobs:
     name: "PR Code Review"
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Checkout Repo's"
+      - name: Checkout Repo's
+        run: echo "Checkout Repo's"
 
       - name: Checkout Workflow Files
         uses: actions/checkout@v2
@@ -61,8 +61,8 @@ jobs:
           echo -e "terraform {\n  cloud {\n    organization = \"bgp-summary-test\"\n\n    workspaces {\n      name = \"${WKSP}\"\n    }\n  }\n}\n" > workspace.tf
           cat workspace.tf
 
-      - run: |
-          echo "Start Validation"
+      - name: Start Validation
+        run: echo "Start Validation"
 
       - name: Terraform Format
         id: fmt
@@ -78,6 +78,12 @@ jobs:
         if: steps.init.outcome == 'success'
         id: validate
         run: terraform validate -no-color
+        continue-on-error: true
+
+      - name: TFLint
+        if: steps.validate.outcome == 'success'
+        id: tflint
+        run: tflint -c .\tmp\tflint.hcl
         continue-on-error: true
 
       - name: Checkov
@@ -100,6 +106,7 @@ jobs:
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### TFLint Validation 💻\`${{ steps.tflint.outcome }}\`
             #### Bridgecrew Checkov ⚙️\`${{ steps.checkov.outcome }}\`
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
@@ -121,6 +128,6 @@ jobs:
               body: output
             })
 
-      - name: Terraform Plan Status
+      - name: Code Review Status
         if: steps.plan.outcome == 'failure' || steps.fmt.outcome == 'failure'
         run: exit 1
