@@ -13,7 +13,7 @@ repos:
         args:
           - --args=--config=./tmp/tflint.hcl
 
-  - repo: https://github.com/bridgecrewio/checkov.git
-    # rev: 2.0.872 # change to tag or sha
-    hooks:
-      - id: checkov
+  # - repo: https://github.com/bridgecrewio/checkov.git
+  #   rev: 2.0.872 # change to tag or sha
+  #   hooks:
+  #     - id: checkov
