@@ -4,8 +4,6 @@ name: pre-commit
 on:
   workflow_call:
     secrets:
-      PERSONAL_ACCESS_TOKEN:
-        required: false
       TFC_API_TOKEN:
         required: true
 
