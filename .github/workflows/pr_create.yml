@@ -85,7 +85,7 @@ jobs:
         id: tflint
         run: |
           echo $PWD
-          ls -la
+          ls -la ../
           tflint -c .\\tflint.hcl
         continue-on-error: true
 
