@@ -14,12 +14,13 @@ jobs:
     name: "PR Code Review"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout TF Code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - uses: actions/checkout@v2
+      - name: Checkout Workflow Files
+        uses: actions/checkout@v2
         with:
           repository: twallac10/firewall_workflows
           path: tmp
@@ -85,7 +86,6 @@ jobs:
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
-        #if: github.event_name == 'pull_request'
         env:
           PLAN: "${{ steps.plan.outputs.stdout }}"
         with:
