@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo's
-        run: echo "Checkout Repo's"
 
       - name: Checkout TF Code
         uses: actions/checkout@v2
@@ -32,8 +31,6 @@ jobs:
           git config --global user.name "Github Test"
 
       - name: Install Tools
-        run: |
-          echo "Install Tools"
 
       - name: Setup Python
         uses: actions/setup-python@v2
