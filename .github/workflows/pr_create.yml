@@ -93,7 +93,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: steps.checkov.outcome == 'success'
+        if: steps.checkov.outcome == 'success' && steps.tflint.outcome == 'success' && steps.validate.outcome == 'success'
         run: terraform plan -no-color
         continue-on-error: true
 
