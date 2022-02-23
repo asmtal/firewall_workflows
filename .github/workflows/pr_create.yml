@@ -43,6 +43,11 @@ jobs:
 
       - uses: actions/setup-python@v2
 
+      - name: Show folders
+        run: |
+          echo $PWD
+          ls -l
+
       - name: Install tflint
         working-directory: tmp
         run: |
