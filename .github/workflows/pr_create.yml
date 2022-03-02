@@ -33,7 +33,7 @@ jobs:
           echo "Fetching TFLint Configuration File"
           mkdir ./tmp && cd ./tmp
           pwd
-          curl -LJO https://github.com/twallac10/firewall_workflows/blob/main/tflint.hcl
+          curl -LJO https://raw.githubusercontent.com/twallac10/firewall_workflows/main/tflint.hcl
           ls -la
           cat ./tflint.hcl
 
