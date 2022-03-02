@@ -22,11 +22,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout Workflow Files
-        uses: actions/checkout@v2
-        with:
-          repository: twallac10/firewall_workflows
-          path: tmp
+#       - name: Checkout Workflow Files
+#         uses: actions/checkout@v2
+#         with:
+#           repository: twallac10/firewall_workflows
+#           path: tmp
+      
+      - name: Curl Repo
+        run: |
+          echo "Fetching TFLint Configuration File"
+          curl -LJO https://github.com/twallac10/firewall_workflows/blob/main/tflint.hcl
 
       - name: Git config
         run: |
