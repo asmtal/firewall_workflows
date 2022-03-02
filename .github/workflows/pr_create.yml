@@ -31,6 +31,7 @@ jobs:
       - name: Curl Repo
         run: |
           echo "Fetching TFLint Configuration File"
+          mkdir ./tmp && cd ./tmp
           curl -LJO https://github.com/twallac10/firewall_workflows/blob/main/tflint.hcl
 
       - name: Git config
