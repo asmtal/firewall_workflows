@@ -5,6 +5,8 @@ on:
   workflow_call:
     secrets:
       TFC_API_TOKEN:
+        required: false
+      VAULT_TOKEN:
         required: true
 
 jobs:
@@ -31,6 +33,17 @@ jobs:
           git config --global user.email "terence.wallace@gmail.com"
           git config --global user.name "Github Test"
 
+      - name: Import Secrets
+        uses: hashicorp/vault-action@v2.2.0
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+        with:
+          url: https://hvp.akeyless.io
+          tlsSkipVerify: true
+          token: ${{ secrets.VAULT_TOKEN }}
+          secrets: |
+            secret/data/tfc TFC_API | TFC_API ;
+
       - name: Install Tools
         run: echo "Installing tools....."
 
@@ -50,7 +63,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           # terraform_version: 0.13.0:
-          cli_config_credentials_token: ${{ secrets.TFC_API_TOKEN }}
+          cli_config_credentials_token: ${{ env.TFC_API }}
 
       - name: Terraform Set workspace
         id: workspace
